@@ -14,7 +14,8 @@ export default class Todo extends Component {
         this.state = { description: '', list: []} //estamos inicializando o estado do componente, uma vez setado o estado inicial para efetuar as alteracoes setState
         this.handleChange = this.handleChange.bind(this)
         this.handleAdd = this.handleAdd.bind(this) // com isso o this vai ser o próprio componente todo, pois o this vai ser chamado do click vindo do DOM e de lá ele vai ser nulo
-        
+        this.handleRemove = this.handleRemove.bind(this)
+
         this.refresh()
     }
 
@@ -45,6 +46,11 @@ export default class Todo extends Component {
             .then(resp => this.refresh())
     }
 
+    handleRemove(todo) {
+        axios.delete(`${URL}/${todo._id}`)
+            .then(resp => this.refresh())
+    }
+
     render () {
         return (
             <div>
@@ -52,7 +58,7 @@ export default class Todo extends Component {
                 <TodoForm description={this.state.description}
                     handleChange={this.handleChange} 
                     handleAdd={this.handleAdd}/>
-                <TodoList />
+                <TodoList list={this.state.list} handleRemove={this.handleRemove}/>
             </div>
         ) 
     }
