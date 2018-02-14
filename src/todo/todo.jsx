@@ -15,6 +15,8 @@ export default class Todo extends Component {
         this.handleChange = this.handleChange.bind(this)
         this.handleAdd = this.handleAdd.bind(this) // com isso o this vai ser o próprio componente todo, pois o this vai ser chamado do click vindo do DOM e de lá ele vai ser nulo
         this.handleRemove = this.handleRemove.bind(this)
+        this.handleMarkAsDone = this.handleMarkAsDone.bind(this)
+        this.handleMarkAsPending = this.handleMarkAsPending.bind(this)
 
         this.refresh()
     }
@@ -51,6 +53,16 @@ export default class Todo extends Component {
             .then(resp => this.refresh())
     }
 
+    handleMarkAsDone(todo) {
+        axios.put(`${URL}/${todo._id}`, {...todo, done: true})
+            .then(resp => this.refresh())
+    }
+
+    handleMarkAsPending(todo) {
+        axios.put(`${URL}/${todo._id}`, {...todo, done: false})
+            .then(resp => this.refresh())
+    }
+
     render () {
         return (
             <div>
@@ -58,7 +70,10 @@ export default class Todo extends Component {
                 <TodoForm description={this.state.description}
                     handleChange={this.handleChange} 
                     handleAdd={this.handleAdd}/>
-                <TodoList list={this.state.list} handleRemove={this.handleRemove}/>
+                <TodoList list={this.state.list}
+                    handleMarkAsDone={this.handleMarkAsDone}
+                    handleMarkAsPending={this.handleMarkAsPending} 
+                    handleRemove={this.handleRemove}/>
             </div>
         ) 
     }
