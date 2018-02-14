@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
+import axios from 'axios'
+
 import PageHeader from '../template/pageHeader'
 import TodoForm from './todoForm'
 import TodoList from './todoList'
+
+
+const URL = 'http://localhost:3003/api/todos'
 
 export default class Todo extends Component {
     constructor(props) {
         super(props) // props é somente para leitura
         this.state = { description: '', list: []} //estamos inicializando o estado do componente, uma vez setado o estado inicial para efetuar as alteracoes setState
-        this.handleChange = this.handleChange.bin(this)
+        this.handleChange = this.handleChange.bind(this)
         this.handleAdd = this.handleAdd.bind(this) // com isso o this vai ser o próprio componente todo, pois o this vai ser chamado do click vindo do DOM e de lá ele vai ser nulo
     }
 
@@ -28,7 +33,9 @@ export default class Todo extends Component {
     }
 
     handleAdd() {
-        console.log(this)
+        const description = this.state.description
+        axios.post(URL, { description })
+            .then(resp => console.log('Item Adicionado!'))
     }
 
     render () {
