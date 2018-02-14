@@ -14,6 +14,13 @@ export default class Todo extends Component {
         this.state = { description: '', list: []} //estamos inicializando o estado do componente, uma vez setado o estado inicial para efetuar as alteracoes setState
         this.handleChange = this.handleChange.bind(this)
         this.handleAdd = this.handleAdd.bind(this) // com isso o this vai ser o próprio componente todo, pois o this vai ser chamado do click vindo do DOM e de lá ele vai ser nulo
+        
+        this.refresh()
+    }
+
+    refresh() {
+        axios.get(`${URL}?sort=-createdAt`)
+            .then(resp => this.setState({...this.state, description: '', list: resp.data}))
     }
 
     handleChange(e) { // esse 'e' é o evento do onChange, dentro dele tem um target que é o input e dentro deste tem o valor que o usuário digitou
@@ -35,7 +42,7 @@ export default class Todo extends Component {
     handleAdd() {
         const description = this.state.description
         axios.post(URL, { description })
-            .then(resp => console.log('Item Adicionado!'))
+            .then(resp => this.refresh())
     }
 
     render () {
